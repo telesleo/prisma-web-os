@@ -1,38 +1,33 @@
 import { css, html, LitElement, type PropertyValues } from "lit";
 import { customElement, query, state } from "lit/decorators.js";
 import runCommand from "../tools/command";
-import type TerminalLogLine from "../interfaces/terminal-log-line";
+import type TerminalLine from "../interfaces/terminal-line";
+import type Terminal from "../interfaces/terminal";
 
 @customElement("os-terminal")
-export class Terminal extends LitElement {
+export class TerminalComponent extends LitElement {
   @state()
   private input: string = "";
   @state()
-  private log: TerminalLogLine[] = [];
+  private lines: TerminalLine[] = [];
 
   @query("#input") inputElement!: HTMLInputElement;
 
-  addToLog(text: string, isInput: boolean) {
-    this.log = [...this.log, { text, isInput }];
+  write(text: string, type: "input" | "output" = "output") {
+    this.lines = [...this.lines, { text, type }];
   }
 
-  clearLog() {
-    this.log = [];
+  clear() {
+    this.lines = [];
   }
 
   run() {
-    this.addToLog(this.input, true);
+    this.write(this.input, "input");
 
-    const result = runCommand(this.input);
-
-    switch (result.effect) {
-      case "clear":
-        this.clearLog();
-    }
-
-    if (result.output) {
-      this.addToLog(result.output, false);
-    }
+    runCommand(this.input, {
+      write: this.write.bind(this),
+      clear: this.clear.bind(this),
+    } as Terminal);
 
     this.input = "";
   }
@@ -58,13 +53,8 @@ export class Terminal extends LitElement {
   render() {
     return html`<div id="terminal" @click=${this.handleFocus}>
       <div id="log">
-        ${this.log.map(
-          (logLine) =>
-            html`
-              <p class="${logLine.isInput ? "log-input" : "log-output"}">
-                ${logLine.text || " "}
-              </p>
-            `
+        ${this.lines.map(
+          (line) => html` <p class="log-${line.type}">${line.text || " "}</p> `
         )}
       </div>
       <input
@@ -96,6 +86,7 @@ export class Terminal extends LitElement {
     .log-output {
       margin: 0;
       height: fit-content;
+      white-space: pre;
     }
 
     .log-input {

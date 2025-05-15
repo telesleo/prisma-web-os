@@ -1,7 +1,8 @@
-import type Command from "../interfaces/command";
-import type CommandResult from "../interfaces/command-result";
+import type CommandInvokation from "../interfaces/command-invocation";
+import type Terminal from "../interfaces/terminal";
+import storageSystem from "./storage-system";
 
-function parseInput(input: string): string[] {
+function parseCommandInput(input: string): string[] {
   const result: string[] = [];
   let inQuotes: boolean = false;
   let current: string = "";
@@ -31,10 +32,11 @@ function parseInput(input: string): string[] {
   return result;
 }
 
-function getCommand(input: string): Command {
-  const commandElements = parseInput(input) as string[];
+function getCommandInvokation(input: string): CommandInvokation {
+  const commandElements = parseCommandInput(input) as string[];
 
-  const command = { _: [] } as Command;
+  const args: string[] = [];
+  const options: { [key: string]: string } = {};
 
   for (let index = 0; index < commandElements.length; index++) {
     const commandElement: string = commandElements[index];
@@ -42,36 +44,31 @@ function getCommand(input: string): Command {
     if (commandElement.startsWith("-")) {
       index++;
       if (index < commandElements.length) {
-        command[commandElement.substring(1)] = commandElements[index];
+        options[commandElement.substring(1)] = commandElements[index];
       }
       continue;
     }
 
-    command._.push(commandElement);
+    args.push(commandElement);
   }
 
-  return command;
+  return { key: args[0], args: args.slice(1), options };
 }
 
-export default function runCommand(input: string): CommandResult {
-  const command = getCommand(input);
+export default function runCommand(input: string, terminal: Terminal) {
+  const commandInvokation = getCommandInvokation(input);
 
-  const commandKey = command._[0] || "";
+  const commandFile = storageSystem.getEntry(
+    `commands/${commandInvokation.key}`
+  ) as string;
 
-  const result = { output: "", effect: "" } as CommandResult;
-
-  if (!commandKey) {
-    return result;
+  if (commandFile === null) {
+    return {
+      output: `"${commandInvokation.key}" is not a command`,
+    };
   }
 
-  switch (commandKey) {
-    case "clear":
-      result.effect = "clear";
-      break;
-    default:
-      result.output = `command "${commandKey}" does not exist`;
-      break;
-  }
+  const runFunction = eval(commandFile);
 
-  return result;
+  runFunction(commandInvokation, terminal, storageSystem);
 }
