@@ -9,8 +9,22 @@ export class TerminalComponent extends LitElement {
   private input: string = "";
   @state()
   private logs: string = "";
+  @state()
+  private path: string = "/";
 
   @query("#input") inputElement!: HTMLInputElement;
+
+  clear() {
+    this.logs = "";
+  }
+
+  getPath() {
+    return this.path;
+  }
+
+  setPath(newPath: string) {
+    this.path = newPath;
+  }
 
   gray(input: string) {
     return `<span class="gray">${input}</span>`;
@@ -23,16 +37,14 @@ export class TerminalComponent extends LitElement {
       (isInput ? text : this.gray(text));
   }
 
-  clear() {
-    this.logs = "";
-  }
-
   run() {
     this.write(this.input, true);
 
     runCommand(this.input, {
       write: this.write.bind(this),
       clear: this.clear.bind(this),
+      getPath: this.getPath.bind(this),
+      setPath: this.setPath.bind(this),
     } as Terminal);
 
     this.input = "";

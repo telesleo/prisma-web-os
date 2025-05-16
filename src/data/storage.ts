@@ -2,7 +2,7 @@ const storage = {
   commands: {
     help: `(function (commandInvokation, terminal, storage) {
   const commandKey = commandInvokation.args.find((arg) => !arg.startsWith("-")) || "";
-  const commandFile = storage.getEntry("commands/" + commandKey);
+  const commandFile = storage.getEntry("/commands/" + commandKey);
 
   if (commandFile === null) {
     return;
@@ -18,7 +18,7 @@ const storage = {
 });
 
 # DOC
-shows the documentation of a given command
+show the documentation of a given command
 `,
     echo: `(function (commandInvokation, terminal) {
   const output = commandInvokation.args.join(" ");
@@ -26,9 +26,9 @@ shows the documentation of a given command
 });
 
 # DOC
-outputs the given arguments as a single string to the terminal
+output the given arguments as a single string to the terminal
 
-EXAMPLES:
+examples:
 
 input: echo "Hello, World!"
 output: Hello, World!
@@ -38,10 +38,12 @@ output: Hello, World!
 });
 
 # DOC
-removes all logs from the terminal
+remove all logs from the terminal
 `,
-    peek: `(async function (commandInvokation, terminal, storage) {
-  const file = storage.getEntry(commandInvokation.args[0]);
+    peek: `(async function (commandInvokation, terminal, storage, tools) {
+  const path = tools.resolvePath(terminal.getPath(), commandInvokation.args[0] || "");
+  console.log(path);
+  const file = storage.getEntry(path);
   let output = file;
   if (typeof(file) === "object") {
     output = Object.keys(file).join(" ");
@@ -50,17 +52,36 @@ removes all logs from the terminal
 });
 
 # DOC
-lists entries of a directory or displays the contents of a file
+list entries of a directory or show the contents of a file
 
-echo [args...]
-
-EXAMPLES:
+examples:
 
 input: peek files
 output: hello-world file-one file-two
 
 input: peek files/hello-world
 output: Hello, World!
+`,
+    path: `(function (commandInvokation, terminal) {
+  const path = terminal.getPath();
+  terminal.write(path);
+});
+  
+# DOC
+show the current path of the terminal
+`,
+    go: `(function (commandInvokation, terminal, storage, tools) {
+  const pathArg = commandInvokation.args.find((arg) => !arg.startsWith("-")) || "";
+
+  const path = tools.resolvePath(terminal.getPath(), pathArg);
+
+  console.log(path);
+
+  terminal.setPath(path);
+});
+
+# DOC
+change the current path of the terminal
 `,
   },
 };

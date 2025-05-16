@@ -1,5 +1,6 @@
 import type CommandInvokation from "../interfaces/command-invocation";
 import type Terminal from "../interfaces/terminal";
+import { resolvePath } from "./path";
 import storage from "./storage";
 
 function segmentInput(input: string): string[] {
@@ -42,7 +43,7 @@ export default function runCommand(input: string, terminal: Terminal) {
   const commandInvokation = parseCommand(input);
 
   const commandFile = storage.getEntry(
-    `commands/${commandInvokation.key}`
+    `/commands/${commandInvokation.key}`
   ) as string;
 
   if (commandFile === null) {
@@ -54,5 +55,5 @@ export default function runCommand(input: string, terminal: Terminal) {
 
   const run = eval(code);
 
-  run(commandInvokation, terminal, storage);
+  run(commandInvokation, terminal, storage, { resolvePath });
 }
