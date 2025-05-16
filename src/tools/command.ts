@@ -1,8 +1,8 @@
 import type CommandInvokation from "../interfaces/command-invocation";
 import type Terminal from "../interfaces/terminal";
-import storageSystem from "./storage-system";
+import storage from "./storage";
 
-function parseCommandInput(input: string): string[] {
+function segmentInput(input: string): string[] {
   const result: string[] = [];
   let inQuotes: boolean = false;
   let current: string = "";
@@ -32,43 +32,27 @@ function parseCommandInput(input: string): string[] {
   return result;
 }
 
-function getCommandInvokation(input: string): CommandInvokation {
-  const commandElements = parseCommandInput(input) as string[];
+function parseCommand(commandInput: string): CommandInvokation {
+  const segments = segmentInput(commandInput);
 
-  const args: string[] = [];
-  const options: { [key: string]: string } = {};
-
-  for (let index = 0; index < commandElements.length; index++) {
-    const commandElement: string = commandElements[index];
-
-    if (commandElement.startsWith("-")) {
-      index++;
-      if (index < commandElements.length) {
-        options[commandElement.substring(1)] = commandElements[index];
-      }
-      continue;
-    }
-
-    args.push(commandElement);
-  }
-
-  return { key: args[0], args: args.slice(1), options };
+  return { key: segments[0], args: segments.slice(1) };
 }
 
 export default function runCommand(input: string, terminal: Terminal) {
-  const commandInvokation = getCommandInvokation(input);
+  const commandInvokation = parseCommand(input);
 
-  const commandFile = storageSystem.getEntry(
+  const commandFile = storage.getEntry(
     `commands/${commandInvokation.key}`
   ) as string;
 
   if (commandFile === null) {
-    return {
-      output: `"${commandInvokation.key}" is not a command`,
-    };
+    terminal.write(`"${commandInvokation.key}" is not a command`);
+    return;
   }
 
-  const runFunction = eval(commandFile);
+  const [code] = commandFile.split("\n# DOC\n");
 
-  runFunction(commandInvokation, terminal, storageSystem);
+  const run = eval(code);
+
+  run(commandInvokation, terminal, storage);
 }

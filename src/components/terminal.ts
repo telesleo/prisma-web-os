@@ -1,7 +1,6 @@
 import { css, html, LitElement, type PropertyValues } from "lit";
 import { customElement, query, state } from "lit/decorators.js";
 import runCommand from "../tools/command";
-import type TerminalLine from "../interfaces/terminal-line";
 import type Terminal from "../interfaces/terminal";
 
 @customElement("os-terminal")
@@ -9,20 +8,27 @@ export class TerminalComponent extends LitElement {
   @state()
   private input: string = "";
   @state()
-  private lines: TerminalLine[] = [];
+  private logs: string = "";
 
   @query("#input") inputElement!: HTMLInputElement;
 
-  write(text: string, type: "input" | "output" = "output") {
-    this.lines = [...this.lines, { text, type }];
+  gray(input: string) {
+    return `<span class="gray">${input}</span>`;
+  }
+
+  write(text: string, isInput: boolean = false) {
+    this.logs =
+      this.logs +
+      (this.logs !== "" ? "\n" : "") +
+      (isInput ? text : this.gray(text));
   }
 
   clear() {
-    this.lines = [];
+    this.logs = "";
   }
 
   run() {
-    this.write(this.input, "input");
+    this.write(this.input, true);
 
     runCommand(this.input, {
       write: this.write.bind(this),
@@ -51,19 +57,17 @@ export class TerminalComponent extends LitElement {
   }
 
   render() {
-    return html`<div id="terminal" @click=${this.handleFocus}>
-      <div id="log">
-        ${this.lines.map(
-          (line) => html` <p class="log-${line.type}">${line.text || " "}</p> `
-        )}
+    return html`
+      <div id="terminal" @click=${this.handleFocus}>
+        <p class="log" .innerHTML=${this.logs}></p>
+        <input
+          id="input"
+          .value="${this.input}"
+          @input=${this.handleInputChange}
+          @keydown=${this.handleInputKeyDown}
+        />
       </div>
-      <input
-        id="input"
-        .value="${this.input}"
-        @input=${this.handleInputChange}
-        @keydown=${this.handleInputKeyDown}
-      />
-    </div>`;
+    `;
   }
 
   static styles = css`
@@ -82,19 +86,11 @@ export class TerminalComponent extends LitElement {
       padding: var(--padding);
     }
 
-    .log-input,
-    .log-output {
+    .log {
       margin: 0;
       height: fit-content;
       white-space: pre;
-    }
-
-    .log-input {
       color: var(--white);
-    }
-
-    .log-output {
-      color: var(--gray);
     }
 
     #input {
@@ -102,6 +98,10 @@ export class TerminalComponent extends LitElement {
       border: 0;
       outline: 0;
       padding: 0;
+    }
+
+    .gray {
+      color: var(--gray);
     }
   `;
 }
