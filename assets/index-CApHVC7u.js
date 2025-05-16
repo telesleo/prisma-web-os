@@ -12,7 +12,7 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */const t$1=globalThis,i$1=t$1.trustedTypes,s$1=i$1?i$1.createPolicy("lit-html",{createHTML:W=>W}):void 0,e$2="$lit$",h=`lit$${Math.random().toFixed(9).slice(2)}$`,o$2="?"+h,n$1=`<${o$2}>`,r$2=document,l=()=>r$2.createComment(""),c=W=>W===null||typeof W!="object"&&typeof W!="function",a=Array.isArray,u=W=>a(W)||typeof(W==null?void 0:W[Symbol.iterator])=="function",d=`[ 	
 \f\r]`,f=/<(?:(!--|\/[^a-zA-Z])|(\/?[a-zA-Z][^>\s]*)|(\/?$))/g,v=/-->/g,_=/>/g,m=RegExp(`>|${d}(?:([^\\s"'>=/]+)(${d}*=${d}*(?:[^ 	
-\f\r"'\`<>=]|("|')|))|$)`,"g"),p=/'/g,g=/"/g,$=/^(?:script|style|textarea|title)$/i,y=W=>(w,...O)=>({_$litType$:W,strings:w,values:O}),x=y(1),T=Symbol.for("lit-noChange"),E=Symbol.for("lit-nothing"),A=new WeakMap,C=r$2.createTreeWalker(r$2,129);function P(W,w){if(!a(W)||!W.hasOwnProperty("raw"))throw Error("invalid template strings array");return s$1!==void 0?s$1.createHTML(w):w}const V=(W,w)=>{const O=W.length-1,U=[];let D,F=w===2?"<svg>":w===3?"<math>":"",q=f;for(let J=0;J<O;J++){const K=W[J];let Z,Q,X=-1,G=0;for(;G<K.length&&(q.lastIndex=G,Q=q.exec(K),Q!==null);)G=q.lastIndex,q===f?Q[1]==="!--"?q=v:Q[1]!==void 0?q=_:Q[2]!==void 0?($.test(Q[2])&&(D=RegExp("</"+Q[2],"g")),q=m):Q[3]!==void 0&&(q=m):q===m?Q[0]===">"?(q=D??f,X=-1):Q[1]===void 0?X=-2:(X=q.lastIndex-Q[2].length,Z=Q[1],q=Q[3]===void 0?m:Q[3]==='"'?g:p):q===g||q===p?q=m:q===v||q===_?q=f:(q=m,D=void 0);const Y=q===m&&W[J+1].startsWith("/>")?" ":"";F+=q===f?K+n$1:X>=0?(U.push(Z),K.slice(0,X)+e$2+K.slice(X)+h+Y):K+h+(X===-2?J:Y)}return[P(W,F+(W[O]||"<?>")+(w===2?"</svg>":w===3?"</math>":"")),U]};class N{constructor({strings:w,_$litType$:O},U){let D;this.parts=[];let F=0,q=0;const J=w.length-1,K=this.parts,[Z,Q]=V(w,O);if(this.el=N.createElement(Z,U),C.currentNode=this.el.content,O===2||O===3){const X=this.el.content.firstChild;X.replaceWith(...X.childNodes)}for(;(D=C.nextNode())!==null&&K.length<J;){if(D.nodeType===1){if(D.hasAttributes())for(const X of D.getAttributeNames())if(X.endsWith(e$2)){const G=Q[q++],Y=D.getAttribute(X).split(h),tt=/([.?@])?(.*)/.exec(G);K.push({type:1,index:F,name:tt[2],strings:Y,ctor:tt[1]==="."?H:tt[1]==="?"?I:tt[1]==="@"?L:k}),D.removeAttribute(X)}else X.startsWith(h)&&(K.push({type:6,index:F}),D.removeAttribute(X));if($.test(D.tagName)){const X=D.textContent.split(h),G=X.length-1;if(G>0){D.textContent=i$1?i$1.emptyScript:"";for(let Y=0;Y<G;Y++)D.append(X[Y],l()),C.nextNode(),K.push({type:2,index:++F});D.append(X[G],l())}}}else if(D.nodeType===8)if(D.data===o$2)K.push({type:2,index:F});else{let X=-1;for(;(X=D.data.indexOf(h,X+1))!==-1;)K.push({type:7,index:F}),X+=h.length-1}F++}}static createElement(w,O){const U=r$2.createElement("template");return U.innerHTML=w,U}}function S(W,w,O=W,U){var q,J;if(w===T)return w;let D=U!==void 0?(q=O._$Co)==null?void 0:q[U]:O._$Cl;const F=c(w)?void 0:w._$litDirective$;return(D==null?void 0:D.constructor)!==F&&((J=D==null?void 0:D._$AO)==null||J.call(D,!1),F===void 0?D=void 0:(D=new F(W),D._$AT(W,O,U)),U!==void 0?(O._$Co??(O._$Co=[]))[U]=D:O._$Cl=D),D!==void 0&&(w=S(W,D._$AS(W,w.values),D,U)),w}class M{constructor(w,O){this._$AV=[],this._$AN=void 0,this._$AD=w,this._$AM=O}get parentNode(){return this._$AM.parentNode}get _$AU(){return this._$AM._$AU}u(w){const{el:{content:O},parts:U}=this._$AD,D=((w==null?void 0:w.creationScope)??r$2).importNode(O,!0);C.currentNode=D;let F=C.nextNode(),q=0,J=0,K=U[0];for(;K!==void 0;){if(q===K.index){let Z;K.type===2?Z=new R(F,F.nextSibling,this,w):K.type===1?Z=new K.ctor(F,K.name,K.strings,this,w):K.type===6&&(Z=new z(F,this,w)),this._$AV.push(Z),K=U[++J]}q!==(K==null?void 0:K.index)&&(F=C.nextNode(),q++)}return C.currentNode=r$2,D}p(w){let O=0;for(const U of this._$AV)U!==void 0&&(U.strings!==void 0?(U._$AI(w,U,O),O+=U.strings.length-2):U._$AI(w[O])),O++}}class R{get _$AU(){var w;return((w=this._$AM)==null?void 0:w._$AU)??this._$Cv}constructor(w,O,U,D){this.type=2,this._$AH=E,this._$AN=void 0,this._$AA=w,this._$AB=O,this._$AM=U,this.options=D,this._$Cv=(D==null?void 0:D.isConnected)??!0}get parentNode(){let w=this._$AA.parentNode;const O=this._$AM;return O!==void 0&&(w==null?void 0:w.nodeType)===11&&(w=O.parentNode),w}get startNode(){return this._$AA}get endNode(){return this._$AB}_$AI(w,O=this){w=S(this,w,O),c(w)?w===E||w==null||w===""?(this._$AH!==E&&this._$AR(),this._$AH=E):w!==this._$AH&&w!==T&&this._(w):w._$litType$!==void 0?this.$(w):w.nodeType!==void 0?this.T(w):u(w)?this.k(w):this._(w)}O(w){return this._$AA.parentNode.insertBefore(w,this._$AB)}T(w){this._$AH!==w&&(this._$AR(),this._$AH=this.O(w))}_(w){this._$AH!==E&&c(this._$AH)?this._$AA.nextSibling.data=w:this.T(r$2.createTextNode(w)),this._$AH=w}$(w){var F;const{values:O,_$litType$:U}=w,D=typeof U=="number"?this._$AC(w):(U.el===void 0&&(U.el=N.createElement(P(U.h,U.h[0]),this.options)),U);if(((F=this._$AH)==null?void 0:F._$AD)===D)this._$AH.p(O);else{const q=new M(D,this),J=q.u(this.options);q.p(O),this.T(J),this._$AH=q}}_$AC(w){let O=A.get(w.strings);return O===void 0&&A.set(w.strings,O=new N(w)),O}k(w){a(this._$AH)||(this._$AH=[],this._$AR());const O=this._$AH;let U,D=0;for(const F of w)D===O.length?O.push(U=new R(this.O(l()),this.O(l()),this,this.options)):U=O[D],U._$AI(F),D++;D<O.length&&(this._$AR(U&&U._$AB.nextSibling,D),O.length=D)}_$AR(w=this._$AA.nextSibling,O){var U;for((U=this._$AP)==null?void 0:U.call(this,!1,!0,O);w&&w!==this._$AB;){const D=w.nextSibling;w.remove(),w=D}}setConnected(w){var O;this._$AM===void 0&&(this._$Cv=w,(O=this._$AP)==null||O.call(this,w))}}class k{get tagName(){return this.element.tagName}get _$AU(){return this._$AM._$AU}constructor(w,O,U,D,F){this.type=1,this._$AH=E,this._$AN=void 0,this.element=w,this.name=O,this._$AM=D,this.options=F,U.length>2||U[0]!==""||U[1]!==""?(this._$AH=Array(U.length-1).fill(new String),this.strings=U):this._$AH=E}_$AI(w,O=this,U,D){const F=this.strings;let q=!1;if(F===void 0)w=S(this,w,O,0),q=!c(w)||w!==this._$AH&&w!==T,q&&(this._$AH=w);else{const J=w;let K,Z;for(w=F[0],K=0;K<F.length-1;K++)Z=S(this,J[U+K],O,K),Z===T&&(Z=this._$AH[K]),q||(q=!c(Z)||Z!==this._$AH[K]),Z===E?w=E:w!==E&&(w+=(Z??"")+F[K+1]),this._$AH[K]=Z}q&&!D&&this.j(w)}j(w){w===E?this.element.removeAttribute(this.name):this.element.setAttribute(this.name,w??"")}}class H extends k{constructor(){super(...arguments),this.type=3}j(w){this.element[this.name]=w===E?void 0:w}}class I extends k{constructor(){super(...arguments),this.type=4}j(w){this.element.toggleAttribute(this.name,!!w&&w!==E)}}class L extends k{constructor(w,O,U,D,F){super(w,O,U,D,F),this.type=5}_$AI(w,O=this){if((w=S(this,w,O,0)??E)===T)return;const U=this._$AH,D=w===E&&U!==E||w.capture!==U.capture||w.once!==U.once||w.passive!==U.passive,F=w!==E&&(U===E||D);D&&this.element.removeEventListener(this.name,this,U),F&&this.element.addEventListener(this.name,this,w),this._$AH=w}handleEvent(w){var O;typeof this._$AH=="function"?this._$AH.call(((O=this.options)==null?void 0:O.host)??this.element,w):this._$AH.handleEvent(w)}}class z{constructor(w,O,U){this.element=w,this.type=6,this._$AN=void 0,this._$AM=O,this.options=U}get _$AU(){return this._$AM._$AU}_$AI(w){S(this,w)}}const j=t$1.litHtmlPolyfillSupport;j==null||j(N,R),(t$1.litHtmlVersions??(t$1.litHtmlVersions=[])).push("3.3.0");const B=(W,w,O)=>{const U=(O==null?void 0:O.renderBefore)??w;let D=U._$litPart$;if(D===void 0){const F=(O==null?void 0:O.renderBefore)??null;U._$litPart$=D=new R(w.insertBefore(l(),F),F,void 0,O??{})}return D._$AI(W),D};/**
+\f\r"'\`<>=]|("|')|))|$)`,"g"),p=/'/g,g=/"/g,$=/^(?:script|style|textarea|title)$/i,y=W=>(w,...O)=>({_$litType$:W,strings:w,values:O}),x=y(1),T=Symbol.for("lit-noChange"),E=Symbol.for("lit-nothing"),A=new WeakMap,C=r$2.createTreeWalker(r$2,129);function P(W,w){if(!a(W)||!W.hasOwnProperty("raw"))throw Error("invalid template strings array");return s$1!==void 0?s$1.createHTML(w):w}const V=(W,w)=>{const O=W.length-1,U=[];let D,F=w===2?"<svg>":w===3?"<math>":"",q=f;for(let J=0;J<O;J++){const K=W[J];let Q,G,Z=-1,X=0;for(;X<K.length&&(q.lastIndex=X,G=q.exec(K),G!==null);)X=q.lastIndex,q===f?G[1]==="!--"?q=v:G[1]!==void 0?q=_:G[2]!==void 0?($.test(G[2])&&(D=RegExp("</"+G[2],"g")),q=m):G[3]!==void 0&&(q=m):q===m?G[0]===">"?(q=D??f,Z=-1):G[1]===void 0?Z=-2:(Z=q.lastIndex-G[2].length,Q=G[1],q=G[3]===void 0?m:G[3]==='"'?g:p):q===g||q===p?q=m:q===v||q===_?q=f:(q=m,D=void 0);const Y=q===m&&W[J+1].startsWith("/>")?" ":"";F+=q===f?K+n$1:Z>=0?(U.push(Q),K.slice(0,Z)+e$2+K.slice(Z)+h+Y):K+h+(Z===-2?J:Y)}return[P(W,F+(W[O]||"<?>")+(w===2?"</svg>":w===3?"</math>":"")),U]};class N{constructor({strings:w,_$litType$:O},U){let D;this.parts=[];let F=0,q=0;const J=w.length-1,K=this.parts,[Q,G]=V(w,O);if(this.el=N.createElement(Q,U),C.currentNode=this.el.content,O===2||O===3){const Z=this.el.content.firstChild;Z.replaceWith(...Z.childNodes)}for(;(D=C.nextNode())!==null&&K.length<J;){if(D.nodeType===1){if(D.hasAttributes())for(const Z of D.getAttributeNames())if(Z.endsWith(e$2)){const X=G[q++],Y=D.getAttribute(Z).split(h),tt=/([.?@])?(.*)/.exec(X);K.push({type:1,index:F,name:tt[2],strings:Y,ctor:tt[1]==="."?H:tt[1]==="?"?I:tt[1]==="@"?L:k}),D.removeAttribute(Z)}else Z.startsWith(h)&&(K.push({type:6,index:F}),D.removeAttribute(Z));if($.test(D.tagName)){const Z=D.textContent.split(h),X=Z.length-1;if(X>0){D.textContent=i$1?i$1.emptyScript:"";for(let Y=0;Y<X;Y++)D.append(Z[Y],l()),C.nextNode(),K.push({type:2,index:++F});D.append(Z[X],l())}}}else if(D.nodeType===8)if(D.data===o$2)K.push({type:2,index:F});else{let Z=-1;for(;(Z=D.data.indexOf(h,Z+1))!==-1;)K.push({type:7,index:F}),Z+=h.length-1}F++}}static createElement(w,O){const U=r$2.createElement("template");return U.innerHTML=w,U}}function S(W,w,O=W,U){var q,J;if(w===T)return w;let D=U!==void 0?(q=O._$Co)==null?void 0:q[U]:O._$Cl;const F=c(w)?void 0:w._$litDirective$;return(D==null?void 0:D.constructor)!==F&&((J=D==null?void 0:D._$AO)==null||J.call(D,!1),F===void 0?D=void 0:(D=new F(W),D._$AT(W,O,U)),U!==void 0?(O._$Co??(O._$Co=[]))[U]=D:O._$Cl=D),D!==void 0&&(w=S(W,D._$AS(W,w.values),D,U)),w}class M{constructor(w,O){this._$AV=[],this._$AN=void 0,this._$AD=w,this._$AM=O}get parentNode(){return this._$AM.parentNode}get _$AU(){return this._$AM._$AU}u(w){const{el:{content:O},parts:U}=this._$AD,D=((w==null?void 0:w.creationScope)??r$2).importNode(O,!0);C.currentNode=D;let F=C.nextNode(),q=0,J=0,K=U[0];for(;K!==void 0;){if(q===K.index){let Q;K.type===2?Q=new R(F,F.nextSibling,this,w):K.type===1?Q=new K.ctor(F,K.name,K.strings,this,w):K.type===6&&(Q=new z(F,this,w)),this._$AV.push(Q),K=U[++J]}q!==(K==null?void 0:K.index)&&(F=C.nextNode(),q++)}return C.currentNode=r$2,D}p(w){let O=0;for(const U of this._$AV)U!==void 0&&(U.strings!==void 0?(U._$AI(w,U,O),O+=U.strings.length-2):U._$AI(w[O])),O++}}class R{get _$AU(){var w;return((w=this._$AM)==null?void 0:w._$AU)??this._$Cv}constructor(w,O,U,D){this.type=2,this._$AH=E,this._$AN=void 0,this._$AA=w,this._$AB=O,this._$AM=U,this.options=D,this._$Cv=(D==null?void 0:D.isConnected)??!0}get parentNode(){let w=this._$AA.parentNode;const O=this._$AM;return O!==void 0&&(w==null?void 0:w.nodeType)===11&&(w=O.parentNode),w}get startNode(){return this._$AA}get endNode(){return this._$AB}_$AI(w,O=this){w=S(this,w,O),c(w)?w===E||w==null||w===""?(this._$AH!==E&&this._$AR(),this._$AH=E):w!==this._$AH&&w!==T&&this._(w):w._$litType$!==void 0?this.$(w):w.nodeType!==void 0?this.T(w):u(w)?this.k(w):this._(w)}O(w){return this._$AA.parentNode.insertBefore(w,this._$AB)}T(w){this._$AH!==w&&(this._$AR(),this._$AH=this.O(w))}_(w){this._$AH!==E&&c(this._$AH)?this._$AA.nextSibling.data=w:this.T(r$2.createTextNode(w)),this._$AH=w}$(w){var F;const{values:O,_$litType$:U}=w,D=typeof U=="number"?this._$AC(w):(U.el===void 0&&(U.el=N.createElement(P(U.h,U.h[0]),this.options)),U);if(((F=this._$AH)==null?void 0:F._$AD)===D)this._$AH.p(O);else{const q=new M(D,this),J=q.u(this.options);q.p(O),this.T(J),this._$AH=q}}_$AC(w){let O=A.get(w.strings);return O===void 0&&A.set(w.strings,O=new N(w)),O}k(w){a(this._$AH)||(this._$AH=[],this._$AR());const O=this._$AH;let U,D=0;for(const F of w)D===O.length?O.push(U=new R(this.O(l()),this.O(l()),this,this.options)):U=O[D],U._$AI(F),D++;D<O.length&&(this._$AR(U&&U._$AB.nextSibling,D),O.length=D)}_$AR(w=this._$AA.nextSibling,O){var U;for((U=this._$AP)==null?void 0:U.call(this,!1,!0,O);w&&w!==this._$AB;){const D=w.nextSibling;w.remove(),w=D}}setConnected(w){var O;this._$AM===void 0&&(this._$Cv=w,(O=this._$AP)==null||O.call(this,w))}}class k{get tagName(){return this.element.tagName}get _$AU(){return this._$AM._$AU}constructor(w,O,U,D,F){this.type=1,this._$AH=E,this._$AN=void 0,this.element=w,this.name=O,this._$AM=D,this.options=F,U.length>2||U[0]!==""||U[1]!==""?(this._$AH=Array(U.length-1).fill(new String),this.strings=U):this._$AH=E}_$AI(w,O=this,U,D){const F=this.strings;let q=!1;if(F===void 0)w=S(this,w,O,0),q=!c(w)||w!==this._$AH&&w!==T,q&&(this._$AH=w);else{const J=w;let K,Q;for(w=F[0],K=0;K<F.length-1;K++)Q=S(this,J[U+K],O,K),Q===T&&(Q=this._$AH[K]),q||(q=!c(Q)||Q!==this._$AH[K]),Q===E?w=E:w!==E&&(w+=(Q??"")+F[K+1]),this._$AH[K]=Q}q&&!D&&this.j(w)}j(w){w===E?this.element.removeAttribute(this.name):this.element.setAttribute(this.name,w??"")}}class H extends k{constructor(){super(...arguments),this.type=3}j(w){this.element[this.name]=w===E?void 0:w}}class I extends k{constructor(){super(...arguments),this.type=4}j(w){this.element.toggleAttribute(this.name,!!w&&w!==E)}}class L extends k{constructor(w,O,U,D,F){super(w,O,U,D,F),this.type=5}_$AI(w,O=this){if((w=S(this,w,O,0)??E)===T)return;const U=this._$AH,D=w===E&&U!==E||w.capture!==U.capture||w.once!==U.once||w.passive!==U.passive,F=w!==E&&(U===E||D);D&&this.element.removeEventListener(this.name,this,U),F&&this.element.addEventListener(this.name,this,w),this._$AH=w}handleEvent(w){var O;typeof this._$AH=="function"?this._$AH.call(((O=this.options)==null?void 0:O.host)??this.element,w):this._$AH.handleEvent(w)}}class z{constructor(w,O,U){this.element=w,this.type=6,this._$AN=void 0,this._$AM=O,this.options=U}get _$AU(){return this._$AM._$AU}_$AI(w){S(this,w)}}const j=t$1.litHtmlPolyfillSupport;j==null||j(N,R),(t$1.litHtmlVersions??(t$1.litHtmlVersions=[])).push("3.3.0");const B=(W,w,O)=>{const U=(O==null?void 0:O.renderBefore)??w;let D=U._$litPart$;if(D===void 0){const F=(O==null?void 0:O.renderBefore)??null;U._$litPart$=D=new R(w.insertBefore(l(),F),F,void 0,O??{})}return D._$AI(W),D};/**
  * @license
  * Copyright 2017 Google LLC
  * SPDX-License-Identifier: BSD-3-Clause
@@ -36,9 +36,9 @@
  * @license
  * Copyright 2017 Google LLC
  * SPDX-License-Identifier: BSD-3-Clause
- */function e(W,w){return(O,U,D)=>{const F=q=>{var J;return((J=q.renderRoot)==null?void 0:J.querySelector(W))??null};return e$1(O,U,{get(){return F(this)}})}}const storage$1={commands:{help:`(function (commandInvokation, terminal, storage) {
+ */function e(W,w){return(O,U,D)=>{const F=q=>{var J;return((J=q.renderRoot)==null?void 0:J.querySelector(W))??null};return e$1(O,U,{get(){return F(this)}})}}function parsePath(W){return W.replace(/^\/|\/$/g,"")}function resolvePath(W,w){return W.endsWith("/")||(W+="/"),new URL(w,"file://"+W).pathname}const storage$1={commands:{help:`(function (commandInvokation, terminal, storage) {
   const commandKey = commandInvokation.args.find((arg) => !arg.startsWith("-")) || "";
-  const commandFile = storage.getEntry("commands/" + commandKey);
+  const commandFile = storage.getEntry("/commands/" + commandKey);
 
   if (commandFile === null) {
     return;
@@ -54,16 +54,16 @@
 });
 
 # DOC
-shows the documentation of a given command
+show the documentation of a given command
 `,echo:`(function (commandInvokation, terminal) {
   const output = commandInvokation.args.join(" ");
   terminal.write(output);
 });
 
 # DOC
-outputs the given arguments as a single string to the terminal
+output the given arguments as a single string to the terminal
 
-EXAMPLES:
+examples:
 
 input: echo "Hello, World!"
 output: Hello, World!
@@ -72,9 +72,11 @@ output: Hello, World!
 });
 
 # DOC
-removes all logs from the terminal
-`,peek:`(async function (commandInvokation, terminal, storage) {
-  const file = storage.getEntry(commandInvokation.args[0]);
+remove all logs from the terminal
+`,peek:`(async function (commandInvokation, terminal, storage, tools) {
+  const path = tools.resolvePath(terminal.getPath(), commandInvokation.args[0] || "");
+  console.log(path);
+  const file = storage.getEntry(path);
   let output = file;
   if (typeof(file) === "object") {
     output = Object.keys(file).join(" ");
@@ -83,21 +85,38 @@ removes all logs from the terminal
 });
 
 # DOC
-lists entries of a directory or displays the contents of a file
+list entries of a directory or show the contents of a file
 
-echo [args...]
-
-EXAMPLES:
+examples:
 
 input: peek files
 output: hello-world file-one file-two
 
 input: peek files/hello-world
 output: Hello, World!
-`}};function getEntry(W){const w=W.split("/");let O=storage$1;for(let U=0;U<w.length;U++){const D=w[U];if(typeof O=="string"||!(D in O))return null;O=O[D]}return O}const storage={getEntry};function segmentInput(W){const w=[];let O=!1,U="";for(let D=0;D<W.length;D++){const F=W[D];if(F==='"'){O=!O;continue}F===" "&&!O?U!==""&&(w.push(U),U=""):U+=F}return U&&w.push(U),w}function parseCommand(W){const w=segmentInput(W);return{key:w[0],args:w.slice(1)}}function runCommand(input,terminal){const commandInvokation=parseCommand(input),commandFile=storage.getEntry(`commands/${commandInvokation.key}`);if(commandFile===null){terminal.write(`"${commandInvokation.key}" is not a command`);return}const[code]=commandFile.split(`
+`,path:`(function (commandInvokation, terminal) {
+  const path = terminal.getPath();
+  terminal.write(path);
+});
+  
 # DOC
-`),run=eval(code);run(commandInvokation,terminal,storage)}var __defProp=Object.defineProperty,__getOwnPropDesc=Object.getOwnPropertyDescriptor,__decorateClass=(W,w,O,U)=>{for(var D=U>1?void 0:U?__getOwnPropDesc(w,O):w,F=W.length-1,q;F>=0;F--)(q=W[F])&&(D=(U?q(w,O,D):q(D))||D);return U&&D&&__defProp(w,O,D),D};let TerminalComponent=class extends i{constructor(){super(...arguments),this.input="",this.logs=""}gray(W){return`<span class="gray">${W}</span>`}write(W,w=!1){this.logs=this.logs+(this.logs!==""?`
-`:"")+(w?W:this.gray(W))}clear(){this.logs=""}run(){this.write(this.input,!0),runCommand(this.input,{write:this.write.bind(this),clear:this.clear.bind(this)}),this.input=""}handleInputChange(W){this.input=W.target.value}handleInputKeyDown(W){W.key==="Enter"&&this.run()}handleFocus(){this.inputElement.focus()}firstUpdated(W){this.inputElement.focus()}render(){return x`
+show the current path of the terminal
+`,go:`(function (commandInvokation, terminal, storage, tools) {
+  const pathArg = commandInvokation.args.find((arg) => !arg.startsWith("-")) || "";
+
+  const path = tools.resolvePath(terminal.getPath(), pathArg);
+
+  console.log(path);
+
+  terminal.setPath(path);
+});
+
+# DOC
+change the current path of the terminal
+`}};function getEntry(W){const w=parsePath(W),O=w?w.split("/"):[];let U=storage$1;for(let D=0;D<O.length;D++){const F=O[D];if(U=U[F],typeof U=="string")break}return U}const storage={getEntry};function segmentInput(W){const w=[];let O=!1,U="";for(let D=0;D<W.length;D++){const F=W[D];if(F==='"'){O=!O;continue}F===" "&&!O?U!==""&&(w.push(U),U=""):U+=F}return U&&w.push(U),w}function parseCommand(W){const w=segmentInput(W);return{key:w[0],args:w.slice(1)}}function runCommand(input,terminal){const commandInvokation=parseCommand(input),commandFile=storage.getEntry(`/commands/${commandInvokation.key}`);if(commandFile===null){terminal.write(`"${commandInvokation.key}" is not a command`);return}const[code]=commandFile.split(`
+# DOC
+`),run=eval(code);run(commandInvokation,terminal,storage,{resolvePath})}var __defProp=Object.defineProperty,__getOwnPropDesc=Object.getOwnPropertyDescriptor,__decorateClass=(W,w,O,U)=>{for(var D=U>1?void 0:U?__getOwnPropDesc(w,O):w,F=W.length-1,q;F>=0;F--)(q=W[F])&&(D=(U?q(w,O,D):q(D))||D);return U&&D&&__defProp(w,O,D),D};let TerminalComponent=class extends i{constructor(){super(...arguments),this.input="",this.logs="",this.path="/"}clear(){this.logs=""}getPath(){return this.path}setPath(W){this.path=W}gray(W){return`<span class="gray">${W}</span>`}write(W,w=!1){this.logs=this.logs+(this.logs!==""?`
+`:"")+(w?W:this.gray(W))}run(){this.write(this.input,!0),runCommand(this.input,{write:this.write.bind(this),clear:this.clear.bind(this),getPath:this.getPath.bind(this),setPath:this.setPath.bind(this)}),this.input=""}handleInputChange(W){this.input=W.target.value}handleInputKeyDown(W){W.key==="Enter"&&this.run()}handleFocus(){this.inputElement.focus()}firstUpdated(W){this.inputElement.focus()}render(){return x`
       <div id="terminal" @click=${this.handleFocus}>
         <p class="log" .innerHTML=${this.logs}></p>
         <input
@@ -140,4 +159,4 @@ output: Hello, World!
     .gray {
       color: var(--gray);
     }
-  `;__decorateClass([r()],TerminalComponent.prototype,"input",2);__decorateClass([r()],TerminalComponent.prototype,"logs",2);__decorateClass([e("#input")],TerminalComponent.prototype,"inputElement",2);TerminalComponent=__decorateClass([t("os-terminal")],TerminalComponent);
+  `;__decorateClass([r()],TerminalComponent.prototype,"input",2);__decorateClass([r()],TerminalComponent.prototype,"logs",2);__decorateClass([r()],TerminalComponent.prototype,"path",2);__decorateClass([e("#input")],TerminalComponent.prototype,"inputElement",2);TerminalComponent=__decorateClass([t("os-terminal")],TerminalComponent);
