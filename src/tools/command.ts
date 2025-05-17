@@ -1,10 +1,11 @@
 import type CommandInvokation from "../interfaces/command-invocation";
 import type Terminal from "../interfaces/terminal";
-import { resolvePath } from "./path";
-import storage from "./storage";
+import pathManager from "./path";
+import storageManager from "./storage";
+import errorManager from "./error";
 
-function segmentInput(input: string): string[] {
-  const result: string[] = [];
+function tokenize(input: string): string[] {
+  const tokens: string[] = [];
   let inQuotes: boolean = false;
   let current: string = "";
 
@@ -18,7 +19,7 @@ function segmentInput(input: string): string[] {
 
     if (char === " " && !inQuotes) {
       if (current !== "") {
-        result.push(current);
+        tokens.push(current);
         current = "";
       }
     } else {
@@ -27,22 +28,22 @@ function segmentInput(input: string): string[] {
   }
 
   if (current) {
-    result.push(current);
+    tokens.push(current);
   }
 
-  return result;
+  return tokens;
 }
 
 function parseCommand(commandInput: string): CommandInvokation {
-  const segments = segmentInput(commandInput);
+  const tokens = tokenize(commandInput);
 
-  return { key: segments[0], args: segments.slice(1) };
+  return { key: tokens[0], args: tokens.slice(1) };
 }
 
 export default function runCommand(input: string, terminal: Terminal) {
   const commandInvokation = parseCommand(input);
 
-  const commandFile = storage.getEntry(
+  const commandFile = storageManager.getEntry(
     `/commands/${commandInvokation.key}`
   ) as string;
 
@@ -53,7 +54,10 @@ export default function runCommand(input: string, terminal: Terminal) {
 
   const [code] = commandFile.split("\n# DOC\n");
 
-  const run = eval(code);
-
-  run(commandInvokation, terminal, storage, { resolvePath });
+  try {
+    const run = eval(code);
+    run(commandInvokation, terminal, storageManager, pathManager, errorManager);
+  } catch (error) {
+    console.error(error);
+  }
 }

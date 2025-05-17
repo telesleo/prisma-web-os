@@ -71,12 +71,13 @@ export class TerminalComponent extends LitElement {
   render() {
     return html`
       <div id="terminal" @click=${this.handleFocus}>
-        <p class="log" .innerHTML=${this.logs}></p>
+        <p id="logs" .innerHTML=${this.logs}></p>
         <input
           id="input"
           .value="${this.input}"
           @input=${this.handleInputChange}
           @keydown=${this.handleInputKeyDown}
+          autocomplete="off"
         />
       </div>
     `;
@@ -98,9 +99,8 @@ export class TerminalComponent extends LitElement {
       padding: var(--padding);
     }
 
-    .log {
+    #logs {
       margin: 0;
-      height: fit-content;
       white-space: pre;
       color: var(--white);
     }
